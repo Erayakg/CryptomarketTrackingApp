@@ -4,8 +4,13 @@ import com.crypto.base.exceptions.BaseErrorMessage;
 
 public enum UserErrorMessage implements BaseErrorMessage {
 
-    NOT_FOUND("User not found!"),;
+    NOT_FOUND("User not found!"),
+    REQUEST_FAILED("User request is not null !!"),
+    USER_SAVE_FAILED("User save failed!"),
+
+    ;
     private String message;
+
     UserErrorMessage(String message) {
         this.message = message;
     }
