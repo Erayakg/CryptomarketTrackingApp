@@ -6,6 +6,7 @@ import com.crypto.base.dto.SaveUserReq;
 import com.crypto.base.dto.UserResDto;
 import com.crypto.base.entities.User;
 import com.crypto.base.exceptions.BusinessException;
+import com.crypto.base.exceptions.NotfoundException;
 import com.crypto.base.repositories.UserRepository;
 import com.crypto.base.services.IUserService;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,16 @@ public class UserServiceImpl implements IUserService {
     @Override
     public void updateUser(SaveUserReq user, Long id) {
 
+        try {
+
+            User userGet= userRepository.getUserById(id);
+            if (userGet == null)
+                throw new NotfoundException(UserErrorMessage.NOT_FOUND);
+              //tamamla
+        }
+        catch (Exception e){
+            throw  new BusinessException(UserErrorMessage.USER_UPDATE_FAILED);
+        }
     }
 
     @Override

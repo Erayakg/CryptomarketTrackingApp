@@ -16,9 +16,8 @@ public class Notification extends BaseEntity {
     private String text;
     private String title;
 
-    @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Transaction> transactions = new LinkedHashSet<>();
-
+    @ManyToMany(mappedBy = "notifications")
+    private Set<User> users = new LinkedHashSet<>();
 
     public Long getId() {
         return id;
@@ -44,28 +43,12 @@ public class Notification extends BaseEntity {
         this.title = title;
     }
 
-    public Set<Transaction> getTransactions() {
-        return transactions;
+    public Set<User> getUsers() {
+        return users;
     }
 
-    public void setTransactions(Set<Transaction> transactions) {
-        this.transactions = transactions;
-    }
-
-    @Override
-    public final boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
-        if (thisEffectiveClass != oEffectiveClass) return false;
-        Notification that = (Notification) o;
-        return id != null && Objects.equals(id, that.id);
-    }
-
-    @Override
-    public final int hashCode() {
-        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
     @Override
@@ -74,7 +57,7 @@ public class Notification extends BaseEntity {
                 "id=" + id +
                 ", text='" + text + '\'' +
                 ", title='" + title + '\'' +
-                ", transactions=" + transactions +
+                ", users=" + users +
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +
                 ", createdBy=" + createdBy +
@@ -82,4 +65,16 @@ public class Notification extends BaseEntity {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Notification that = (Notification) o;
+        return Objects.equals(id, that.id) && Objects.equals(text, that.text) && Objects.equals(title, that.title) && Objects.equals(users, that.users);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, text, title, users);
+    }
 }
