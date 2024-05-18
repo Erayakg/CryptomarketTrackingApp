@@ -8,12 +8,12 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-public  class  BaseEntity implements Serializable,Cloneable {
+public  class BaseEntity implements Serializable,Cloneable {
 
-   private LocalDateTime createDate;
-   private LocalDateTime updateDate;
-   private Long createdBy;
-   private Long updatedBy;
+    LocalDateTime createDate;
+    LocalDateTime updateDate;
+    Long createdBy;
+    Long updatedBy;
 
    @PrePersist
    private void prePersist() {
