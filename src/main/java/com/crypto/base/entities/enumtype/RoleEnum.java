@@ -1,4 +1,4 @@
-package com.crypto.base.entities;
+package com.crypto.base.entities.enumtype;
 
 public enum RoleEnum {
 
