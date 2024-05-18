@@ -24,17 +24,6 @@ public class Transaction extends BaseEntity{
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "notification_id")
-    private Notification notification;
-
-    public Notification getNotification() {
-        return notification;
-    }
-
-    public void setNotification(Notification notification) {
-        this.notification = notification;
-    }
 
     public Long getId() {
         return id;
