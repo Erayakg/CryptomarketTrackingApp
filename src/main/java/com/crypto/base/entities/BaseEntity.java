@@ -3,12 +3,16 @@ package com.crypto.base.entities;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-public  class BaseEntity implements Serializable,Cloneable {
+@Getter
+@Setter
+public abstract  class BaseEntity implements Serializable,Cloneable {
 
     LocalDateTime createDate;
     LocalDateTime updateDate;
