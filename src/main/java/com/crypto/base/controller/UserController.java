@@ -30,10 +30,17 @@ public class UserController {
 
         if (saveUserReq == null)
             throw new BadRequestException(UserErrorMessage.REQUEST_FAILED);
-        
+
         userService.saveUser(saveUserReq);
 
         return new ResponseEntity<>(RestResponse.empty(), HttpStatus.CREATED);
+    }
+    @PostMapping("/{id}/updateUser")
+    public ResponseEntity<RestResponse<SaveUserReq>> updateUser(@PathVariable Long id, @RequestBody SaveUserReq saveUserReq) {
+
+        userService.updateUser(saveUserReq, id);
+
+        return new ResponseEntity<>(RestResponse.empty(), HttpStatus.OK);
     }
 
     @GetMapping("/getUser")

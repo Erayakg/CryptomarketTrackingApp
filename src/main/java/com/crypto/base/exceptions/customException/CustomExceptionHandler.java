@@ -1,6 +1,7 @@
 package com.crypto.base.exceptions.customException;
 
 import com.crypto.base.dto.RestResponse;
+import com.crypto.base.exceptions.AdminSaveError;
 import com.crypto.base.exceptions.BusinessException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
@@ -57,6 +58,13 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         RestResponse<GenericErrorMessage> genericErrorMessageRestResponse = getGenericErrorMessageRestResponse(e, request);
         return new ResponseEntity<>(genericErrorMessageRestResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleAdminSaveError(AdminSaveError e, WebRequest request){
+        RestResponse<GenericErrorMessage> genericErrorMessageRestResponse = getGenericErrorMessageRestResponse(e, request);
+        return new ResponseEntity<>(genericErrorMessageRestResponse, HttpStatus.FORBIDDEN);
+    }
+
 
     private RestResponse<GenericErrorMessage> getGenericErrorMessageRestResponse(Exception e, WebRequest request) {
         String message = e.getMessage();
