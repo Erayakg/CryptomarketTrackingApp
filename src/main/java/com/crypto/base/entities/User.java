@@ -10,26 +10,34 @@ import java.util.Set;
 
 @Entity
 @Table(name = "TABLE_USER")
-public class User extends BaseEntity{
+public class User extends BaseEntity {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
+
     @Enumerated(EnumType.STRING)
     private RoleEnum roleEnum;
+
     @Column(name = "USER_NAME")
     private String name;
+
     @Column(name = "user_surname")
     private String surName;
+
     @Column(name = "user_email")
     private String email;
+
     @Column(name = "user_password")
     private String password;
+
     @Column(name = "user_profile_photo")
     private String profilePhoto;
+
     @Column(name = "user_about")
     private String about;
+
     @Column(name = "user_country")
     private String country;
 
@@ -42,20 +50,33 @@ public class User extends BaseEntity{
             inverseJoinColumns = @JoinColumn(name = "notifications_id"))
     private Set<Notification> notifications = new LinkedHashSet<>();
 
-    public Set<Portfolio> getPortfolios() {
-        return portfolios;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FollowingPortfolio> followingPortfolios = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> comments = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Like> likes = new LinkedHashSet<>();
+
+    public User() {
     }
 
-    public void setPortfolios(Set<Portfolio> portfolios) {
+    public User(Long id, RoleEnum roleEnum, String name, String surName, String email, String password, String profilePhoto, String about, String country, Set<Portfolio> portfolios, Set<Notification> notifications, Set<FollowingPortfolio> followingPortfolios, Set<Comment> comments, Set<Like> likes) {
+        this.id = id;
+        this.roleEnum = roleEnum;
+        this.name = name;
+        this.surName = surName;
+        this.email = email;
+        this.password = password;
+        this.profilePhoto = profilePhoto;
+        this.about = about;
+        this.country = country;
         this.portfolios = portfolios;
-    }
-
-    public Set<Notification> getNotifications() {
-        return notifications;
-    }
-
-    public void setNotifications(Set<Notification> notifications) {
         this.notifications = notifications;
+        this.followingPortfolios = followingPortfolios;
+        this.comments = comments;
+        this.likes = likes;
     }
 
     public Long getId() {
@@ -130,20 +151,57 @@ public class User extends BaseEntity{
         this.country = country;
     }
 
-    @Override
-    public final boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
-        if (thisEffectiveClass != oEffectiveClass) return false;
-        User user = (User) o;
-        return id != null && Objects.equals(id, user.id);
+    public Set<Portfolio> getPortfolios() {
+        return portfolios;
+    }
+
+    public void setPortfolios(Set<Portfolio> portfolios) {
+        this.portfolios = portfolios;
+    }
+
+    public Set<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(Set<Notification> notifications) {
+        this.notifications = notifications;
+    }
+
+    public Set<FollowingPortfolio> getFollowingPortfolios() {
+        return followingPortfolios;
+    }
+
+    public void setFollowingPortfolios(Set<FollowingPortfolio> followingPortfolios) {
+        this.followingPortfolios = followingPortfolios;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public Set<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<Like> likes) {
+        this.likes = likes;
     }
 
     @Override
-    public final int hashCode() {
-        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && roleEnum == user.roleEnum && Objects.equals(name, user.name) && Objects.equals(surName, user.surName) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(profilePhoto, user.profilePhoto) && Objects.equals(about, user.about) && Objects.equals(country, user.country) && Objects.equals(portfolios, user.portfolios) && Objects.equals(notifications, user.notifications) && Objects.equals(followingPortfolios, user.followingPortfolios) && Objects.equals(comments, user.comments) && Objects.equals(likes, user.likes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, roleEnum, name, surName, email, password, profilePhoto, about, country, portfolios, notifications, followingPortfolios, comments, likes);
     }
 
     @Override
@@ -160,6 +218,9 @@ public class User extends BaseEntity{
                 ", country='" + country + '\'' +
                 ", portfolios=" + portfolios +
                 ", notifications=" + notifications +
+                ", followingPortfolios=" + followingPortfolios +
+                ", comments=" + comments +
+                ", likes=" + likes +
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +
                 ", createdBy=" + createdBy +

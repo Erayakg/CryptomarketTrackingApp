@@ -9,8 +9,9 @@ import java.util.Set;
 
 @Entity
 public class Notification extends BaseEntity {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     private String text;
@@ -18,6 +19,16 @@ public class Notification extends BaseEntity {
 
     @ManyToMany(mappedBy = "notifications")
     private Set<User> users = new LinkedHashSet<>();
+
+    public Notification() {
+    }
+
+    public Notification(Long id, String text, String title, Set<User> users) {
+        this.id = id;
+        this.text = text;
+        this.title = title;
+        this.users = users;
+    }
 
     public Long getId() {
         return id;
@@ -52,6 +63,19 @@ public class Notification extends BaseEntity {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Notification that = (Notification) o;
+        return Objects.equals(id, that.id) && Objects.equals(text, that.text) && Objects.equals(title, that.title) && Objects.equals(users, that.users);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, text, title, users);
+    }
+
+    @Override
     public String toString() {
         return "Notification{" +
                 "id=" + id +
@@ -63,18 +87,5 @@ public class Notification extends BaseEntity {
                 ", createdBy=" + createdBy +
                 ", updatedBy=" + updatedBy +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Notification that = (Notification) o;
-        return Objects.equals(id, that.id) && Objects.equals(text, that.text) && Objects.equals(title, that.title) && Objects.equals(users, that.users);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, text, title, users);
     }
 }

@@ -5,25 +5,37 @@ import jakarta.persistence.*;
 
 import java.util.Objects;
 
-
 @Entity
-public class Transaction extends BaseEntity{
+public class Transaction extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "transaction_id", nullable = false)
     private Long id;
+
     @Enumerated(EnumType.STRING)
     private IsActiveEnum isActiveEnum;
+
     private Long salePrice;
     private Long purchasePrice;
     private Long amount;
     private Long tokenId;
 
-
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
+    public Transaction() {
+    }
+
+    public Transaction(Long id, IsActiveEnum isActiveEnum, Long salePrice, Long purchasePrice, Long amount, Long tokenId, Portfolio portfolio) {
+        this.id = id;
+        this.isActiveEnum = isActiveEnum;
+        this.salePrice = salePrice;
+        this.purchasePrice = purchasePrice;
+        this.amount = amount;
+        this.tokenId = tokenId;
+        this.portfolio = portfolio;
+    }
 
     public Long getId() {
         return id;
@@ -82,6 +94,19 @@ public class Transaction extends BaseEntity{
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return Objects.equals(id, that.id) && isActiveEnum == that.isActiveEnum && Objects.equals(salePrice, that.salePrice) && Objects.equals(purchasePrice, that.purchasePrice) && Objects.equals(amount, that.amount) && Objects.equals(tokenId, that.tokenId) && Objects.equals(portfolio, that.portfolio);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, isActiveEnum, salePrice, purchasePrice, amount, tokenId, portfolio);
+    }
+
+    @Override
     public String toString() {
         return "Transaction{" +
                 "id=" + id +
@@ -97,18 +122,4 @@ public class Transaction extends BaseEntity{
                 ", updatedBy=" + updatedBy +
                 '}';
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Transaction that = (Transaction) o;
-        return Objects.equals(id, that.id) && isActiveEnum == that.isActiveEnum && Objects.equals(salePrice, that.salePrice) && Objects.equals(purchasePrice, that.purchasePrice) && Objects.equals(amount, that.amount) && Objects.equals(tokenId, that.tokenId) && Objects.equals(portfolio, that.portfolio);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, isActiveEnum, salePrice, purchasePrice, amount, tokenId, portfolio);
-    }
-
 }
