@@ -1,4 +1,4 @@
-package com.crypto.base.dto.response;
+package com.crypto.base.dto;
 
 
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.crypto.base.dto.request;
+package com.crypto.base.dto;
 
 import lombok.Value;
 

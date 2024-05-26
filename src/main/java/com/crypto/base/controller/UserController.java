@@ -1,15 +1,19 @@
 package com.crypto.base.controller;
 
 import com.crypto.base.constant.UserErrorMessage;
-import com.crypto.base.dto.response.RestResponse;
-import com.crypto.base.dto.request.SaveUserReq;
+import com.crypto.base.dto.RestResponse;
+import com.crypto.base.dto.SaveUserReq;
 import com.crypto.base.dto.UserDto;
+import com.crypto.base.entities.User;
 import com.crypto.base.exceptions.BadRequestException;
 import com.crypto.base.exceptions.NotfoundException;
 import com.crypto.base.services.Impl.UserServiceImpl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.file.ReadOnlyFileSystemException;
 
 @RestController
 @RequestMapping("/v1/user")

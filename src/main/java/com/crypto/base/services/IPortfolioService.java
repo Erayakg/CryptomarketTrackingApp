@@ -1,6 +1,6 @@
 package com.crypto.base.services;
 
-import com.crypto.base.dto.request.PortfolioTransactionReq;
+import com.crypto.base.dto.PortfolioTransactionReq;
 
 public interface IPortfolioService {
 

@@ -1,8 +1,8 @@
 package com.crypto.base.services;
 
-import com.crypto.base.dto.request.CreatePortfolioDto;
-import com.crypto.base.dto.request.SaveUserReq;
-import com.crypto.base.dto.response.UserResDto;
+import com.crypto.base.dto.CreatePortfolioDto;
+import com.crypto.base.dto.SaveUserReq;
+import com.crypto.base.dto.UserResDto;
 
 import java.util.List;
 
