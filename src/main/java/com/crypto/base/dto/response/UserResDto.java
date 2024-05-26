@@ -1,4 +1,4 @@
-package com.crypto.base.dto;
+package com.crypto.base.dto.response;
 
 import com.crypto.base.entities.enumtype.IsActiveEnum;
 import com.crypto.base.entities.enumtype.RoleEnum;

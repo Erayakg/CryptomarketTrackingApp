@@ -1,4 +1,4 @@
-package com.crypto.base.dto;
+package com.crypto.base.dto.request;
 
 import com.crypto.base.entities.User;
 import com.crypto.base.entities.enumtype.RoleEnum;

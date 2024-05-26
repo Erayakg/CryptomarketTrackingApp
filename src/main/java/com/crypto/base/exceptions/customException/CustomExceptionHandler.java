@@ -1,9 +1,8 @@
 package com.crypto.base.exceptions.customException;
 
-import com.crypto.base.dto.RestResponse;
+import com.crypto.base.dto.response.RestResponse;
 import com.crypto.base.exceptions.BusinessException;
 import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

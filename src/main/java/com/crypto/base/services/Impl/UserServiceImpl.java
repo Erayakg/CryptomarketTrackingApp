@@ -1,9 +1,9 @@
 package com.crypto.base.services.Impl;
 
 import com.crypto.base.constant.UserErrorMessage;
-import com.crypto.base.dto.CreatePortfolioDto;
-import com.crypto.base.dto.SaveUserReq;
-import com.crypto.base.dto.UserResDto;
+import com.crypto.base.dto.request.CreatePortfolioDto;
+import com.crypto.base.dto.request.SaveUserReq;
+import com.crypto.base.dto.response.UserResDto;
 import com.crypto.base.entities.User;
 import com.crypto.base.exceptions.BusinessException;
 import com.crypto.base.exceptions.NotfoundException;
