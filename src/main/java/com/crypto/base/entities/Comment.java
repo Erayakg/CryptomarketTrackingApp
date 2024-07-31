@@ -7,17 +7,13 @@ import java.util.Objects;
 
 @Entity
 public class Comment extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "USER_ID")
     private User user;
 
     private String text;
@@ -30,14 +26,6 @@ public class Comment extends BaseEntity {
         this.portfolio = portfolio;
         this.user = user;
         this.text = text;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Portfolio getPortfolio() {

@@ -7,10 +7,7 @@ import java.util.Objects;
 
 @Entity
 public class Transaction extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "transaction_id", nullable = false)
-    private Long id;
+
 
     @Enumerated(EnumType.STRING)
     private IsActiveEnum isActiveEnum;
@@ -37,13 +34,7 @@ public class Transaction extends BaseEntity {
         this.portfolio = portfolio;
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public IsActiveEnum getIsActiveEnum() {
         return isActiveEnum;

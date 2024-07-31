@@ -9,10 +9,6 @@ import java.util.Set;
 
 @Entity
 public class Notification extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
 
     private String text;
     private String title;
@@ -30,13 +26,6 @@ public class Notification extends BaseEntity {
         this.users = users;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getText() {
         return text;

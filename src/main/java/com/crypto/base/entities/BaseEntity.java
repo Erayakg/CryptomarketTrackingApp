@@ -11,6 +11,10 @@ import java.util.Objects;
 @MappedSuperclass
 public abstract  class BaseEntity implements Serializable,Cloneable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", nullable = false)
+    protected Long id;
 
     LocalDateTime createDate;
     LocalDateTime updateDate;
@@ -61,5 +65,11 @@ public abstract  class BaseEntity implements Serializable,Cloneable {
         this.updatedBy = updatedBy;
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

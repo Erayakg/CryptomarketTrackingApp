@@ -12,10 +12,7 @@ import java.util.Set;
 @Table(name = "TABLE_USER")
 public class User extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+
 
     @Enumerated(EnumType.STRING)
     private RoleEnum roleEnum;
@@ -23,46 +20,37 @@ public class User extends BaseEntity {
     @Column(name = "USER_NAME")
     private String name;
 
-    @Column(name = "user_surname")
+    @Column(name = "USER_SURNAME")
     private String surName;
 
-    @Column(name = "user_email")
+    @Column(name = "USER_EMAIL")
     private String email;
 
-    @Column(name = "user_password")
+    @Column(name = "USER_PASSWORD")
     private String password;
 
-    @Column(name = "user_profile_photo")
+    @Column(name = "USER_PROFILE_PHOTO")
     private String profilePhoto;
 
-    @Column(name = "user_about")
+    @Column(name = "USER_ABOUT",length = 1000)
     private String about;
 
-    @Column(name = "user_country")
+    @Column(name = "USER_COUNTRY")
     private String country;
-
+    @Column(name = "PORTFOLIO")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Portfolio> portfolios = new LinkedHashSet<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "TABLE_USER_notifications",
-            joinColumns = @JoinColumn(name = "user_id"),
+            joinColumns = @JoinColumn(name = "USER_ID"),
             inverseJoinColumns = @JoinColumn(name = "notifications_id"))
     private Set<Notification> notifications = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<FollowingPortfolio> followingPortfolios = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Like> likes = new LinkedHashSet<>();
-
-    public User() {
-    }
-
-    public User(Long id, RoleEnum roleEnum, String name, String surName, String email, String password, String profilePhoto, String about, String country, Set<Portfolio> portfolios, Set<Notification> notifications, Set<FollowingPortfolio> followingPortfolios, Set<Comment> comments, Set<Like> likes) {
+    public User(Long id, RoleEnum roleEnum, String name, String surName, String email, String password, String profilePhoto, String about, String country, Set<Portfolio> portfolios, Set<Notification> notifications, Set<Comment> comments) {
         this.id = id;
         this.roleEnum = roleEnum;
         this.name = name;
@@ -74,17 +62,10 @@ public class User extends BaseEntity {
         this.country = country;
         this.portfolios = portfolios;
         this.notifications = notifications;
-        this.followingPortfolios = followingPortfolios;
         this.comments = comments;
-        this.likes = likes;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public User() {
     }
 
     public RoleEnum getRoleEnum() {
@@ -166,15 +147,6 @@ public class User extends BaseEntity {
     public void setNotifications(Set<Notification> notifications) {
         this.notifications = notifications;
     }
-
-    public Set<FollowingPortfolio> getFollowingPortfolios() {
-        return followingPortfolios;
-    }
-
-    public void setFollowingPortfolios(Set<FollowingPortfolio> followingPortfolios) {
-        this.followingPortfolios = followingPortfolios;
-    }
-
     public Set<Comment> getComments() {
         return comments;
     }
@@ -183,25 +155,17 @@ public class User extends BaseEntity {
         this.comments = comments;
     }
 
-    public Set<Like> getLikes() {
-        return likes;
-    }
-
-    public void setLikes(Set<Like> likes) {
-        this.likes = likes;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && roleEnum == user.roleEnum && Objects.equals(name, user.name) && Objects.equals(surName, user.surName) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(profilePhoto, user.profilePhoto) && Objects.equals(about, user.about) && Objects.equals(country, user.country) && Objects.equals(portfolios, user.portfolios) && Objects.equals(notifications, user.notifications) && Objects.equals(followingPortfolios, user.followingPortfolios) && Objects.equals(comments, user.comments) && Objects.equals(likes, user.likes);
+        return Objects.equals(getId(), user.id) && roleEnum == user.roleEnum && Objects.equals(name, user.name) && Objects.equals(surName, user.surName) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(profilePhoto, user.profilePhoto) && Objects.equals(about, user.about) && Objects.equals(country, user.country) && Objects.equals(portfolios, user.portfolios) && Objects.equals(notifications, user.notifications) && Objects.equals(comments, user.comments);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, roleEnum, name, surName, email, password, profilePhoto, about, country, portfolios, notifications, followingPortfolios, comments, likes);
+        return Objects.hash(id, roleEnum, name, surName, email, password, profilePhoto, about, country, portfolios, notifications, comments);
     }
 
     @Override
@@ -218,9 +182,7 @@ public class User extends BaseEntity {
                 ", country='" + country + '\'' +
                 ", portfolios=" + portfolios +
                 ", notifications=" + notifications +
-                ", followingPortfolios=" + followingPortfolios +
                 ", comments=" + comments +
-                ", likes=" + likes +
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +
                 ", createdBy=" + createdBy +
