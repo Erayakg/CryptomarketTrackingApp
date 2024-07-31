@@ -1,44 +1,29 @@
 package com.crypto.base.entities;
 
 import jakarta.persistence.*;
-import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
 
 @Entity
+@Table(name = "TABLE_LIKE")
 public class Like extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+
 
     @ManyToOne
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
     private int likes;
 
     public Like() {
     }
 
-    public Like(Long id, Portfolio portfolio, User user, int likes) {
+    public Like(Long id, Portfolio portfolio,  int likes) {
         this.id = id;
         this.portfolio = portfolio;
-        this.user = user;
         this.likes = likes;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Portfolio getPortfolio() {
         return portfolio;
@@ -48,13 +33,6 @@ public class Like extends BaseEntity {
         this.portfolio = portfolio;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public int getLikes() {
         return likes;
@@ -69,12 +47,12 @@ public class Like extends BaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Like like = (Like) o;
-        return likes == like.likes && Objects.equals(id, like.id) && Objects.equals(portfolio, like.portfolio) && Objects.equals(user, like.user);
+        return likes == like.likes && Objects.equals(id, like.id) && Objects.equals(portfolio, like.portfolio);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, portfolio, user, likes);
+        return Objects.hash(id, portfolio, likes);
     }
 
     @Override
@@ -82,7 +60,6 @@ public class Like extends BaseEntity {
         return "Like{" +
                 "id=" + id +
                 ", portfolio=" + portfolio +
-                ", user=" + user +
                 ", likes=" + likes +
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +

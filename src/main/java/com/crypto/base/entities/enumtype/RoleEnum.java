@@ -3,8 +3,8 @@ package com.crypto.base.entities.enumtype;
 public enum RoleEnum {
 
     ADMIN("admin", 1),
-    USER("user", 2);
-
+    USER("user", 2),
+    TRADER("trader",3);
     Integer typeInt;
     String typeString;
 
