@@ -1,5 +1,6 @@
 package com.crypto.base.dto;
 
+import lombok.Data;
 import lombok.Value;
 
 import java.io.Serializable;
@@ -18,10 +19,11 @@ public class UserResDto implements Serializable {
     String name;
     String surName;
     String email;
-    String password;
     String profilePhoto;
     String about;
     String country;
     Set<PortfolioDto> portfolios;
     Set<NotificationDto> notifications;
+    String type;
+
 }
