@@ -3,8 +3,8 @@ package com.crypto.base.exceptions.customException;
 import com.crypto.base.dto.RestResponse;
 import com.crypto.base.exceptions.AdminSaveError;
 import com.crypto.base.exceptions.BusinessException;
+import org.apache.coyote.BadRequestException;
 import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,7 +24,6 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         RestResponse<GenericErrorMessage> response = new RestResponse<>();
         response=getGenericErrorMessageRestResponse(ex,request);
         return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
-
     }
 
 
@@ -41,6 +40,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         RestResponse<GenericErrorMessage>
                 genericErrorMessageRestResponse = getGenericErrorMessageRestResponse(e, request);
         return new ResponseEntity<>(genericErrorMessageRestResponse, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler
+    public  final  ResponseEntity<Object> handleBadRequestException(BadRequestException e, WebRequest request){
+        RestResponse<GenericErrorMessage> genericErrorMessageRestResponse= getGenericErrorMessageRestResponse(e, request);
+        return new ResponseEntity<>(genericErrorMessageRestResponse, HttpStatus.BAD_REQUEST);
+
     }
 
     private static RestResponse<GenericErrorMessage> getGenericErrorMessageRestResponse(BusinessException e,

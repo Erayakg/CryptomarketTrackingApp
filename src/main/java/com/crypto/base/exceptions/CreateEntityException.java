@@ -3,10 +3,9 @@ package com.crypto.base.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.BAD_REQUEST)
-public class BadRequestException extends BusinessException{
-
-    public BadRequestException(BaseErrorMessage errorMessage) {
+@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+public class CreateEntityException extends BusinessException {
+    public CreateEntityException(BaseErrorMessage errorMessage) {
         super(errorMessage);
     }
 }

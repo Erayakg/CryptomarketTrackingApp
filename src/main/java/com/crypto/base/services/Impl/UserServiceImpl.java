@@ -9,8 +9,10 @@ import com.crypto.base.entities.User;
 import com.crypto.base.exceptions.AdminSaveError;
 import com.crypto.base.exceptions.BusinessException;
 import com.crypto.base.exceptions.NotfoundException;
+import com.crypto.base.mapper.UserMapper;
 import com.crypto.base.repositories.UserRepository;
 import com.crypto.base.services.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +24,18 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
-
-    public UserServiceImpl(UserRepository userRepository) {
+    private final UserMapper userMapper;
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     @Override
-    public void saveUser(SaveUserReq user) {
-        User saveUser = mapReqToUser(user);
+    public UserDtoRes saveUser(SaveUserReq user) {
+
+        User saveUser = userMapper.toEntity(user);
+
         if (saveUser.getRoleEnum().getTypeInt() == 1) {
             throw new AdminSaveError(UserErrorMessage.USER_NOT_ADMIN);
         }
@@ -74,7 +80,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserResDto getUserById(Long id) {
+    public UserDtoRes getUserById(Long id) {
         User userGet = userRepository.getUserById(id);
         if (userGet == null)
             throw new NotfoundException(UserErrorMessage.NOT_FOUND);
@@ -82,112 +88,25 @@ public class UserServiceImpl implements IUserService {
         return null;
     }
     @Override
-    public List<UserResDto> getAllUsers() {
+    public List<UserDtoRes> getAllUsers() {
         List<User> userList = userRepository.findAll();
         return userList.stream().map(this::mapToUserResDto).collect(Collectors.toList());
     }
 
     @Override
-    public UserResDto createPortfolio(Long userId, CreatePortfolioDto portfolioDto) {
+    public UserDtoRes createPortfolio(Long userId, CreatePortfolioDto portfolioDto) {
         return null;
     }
 
     @Override
-    public UserResDto addPortfolio(Long userID, Long portfolioID) {
+    public UserDtoRes addPortfolio(Long userID, Long portfolioID) {
         return null;
     }
 
     @Override
-    public UserResDto removePortfolio(Long userID, Long portfolioID) {
+    public UserDtoRes removePortfolio(Long userID, Long portfolioID) {
         return null;
     }
-    public User mapReqToUser(SaveUserReq saveUserReq) {
-        User user = new User();
-        user.setAbout(saveUserReq.getAbout());
-        user.setEmail(saveUserReq.getEmail());
-        user.setName(saveUserReq.getName());
-        user.setPassword(saveUserReq.getPassword());
-        user.setRoleEnum(saveUserReq.getRoleEnum());
-        user.setProfilePhoto(saveUserReq.getProfilePhoto());
-        user.setCountry(saveUserReq.getCountry());
-        user.setSurName(saveUserReq.getSurName());
-
-        return user;
-    }
 
 
-    private UserResDto mapToUserResDto(User user) {
-        Set<PortfolioDto> portfolioDtos = user.getPortfolios().stream()
-                .map(this::mapToPortfolioDto)
-                .collect(Collectors.toSet());
-
-        Set<NotificationDto> notificationDtos = user.getNotifications().stream()
-                .map(this::mapToNotificationDto)
-                .collect(Collectors.toSet());
-
-        return new UserResDto(
-                user.getCreateDate(),
-                user.getUpdateDate(),
-                user.getCreatedBy(),
-                user.getUpdatedBy(),
-                user.getName(),
-                user.getSurName(),
-                user.getEmail(),
-                user.getProfilePhoto(),
-                user.getAbout(),
-                user.getCountry(),
-                portfolioDtos,
-                notificationDtos,
-                user.getRoleEnum().getTypeString()
-        );
-    }
-
-    private PortfolioDto mapToPortfolioDto(Portfolio portfolio) {
-        Set<TransactionDto> transactionDtos = portfolio.getTransactions().stream()
-                .map(this::mapToTransactionDto)
-                .collect(Collectors.toSet());
-
-        return new PortfolioDto(
-                portfolio.getCreateDate(),
-                portfolio.getUpdateDate(),
-                portfolio.getCreatedBy(),
-                portfolio.getUpdatedBy(),
-                portfolio.getId(),
-                portfolio.getName(),
-                portfolio.getDescription(),
-                transactionDtos
-        );
-    }
-
-    private NotificationDto mapToNotificationDto(Notification notification) {
-        return new NotificationDto(
-                notification.getCreateDate(),
-                notification.getUpdateDate(),
-                notification.getCreatedBy(),
-                notification.getUpdatedBy(),
-                notification.getId(),
-                notification.getText(),
-                notification.getTitle()
-        );
-    }
-
-    private TransactionDto mapToTransactionDto(Transaction transaction) {
-        return new TransactionDto(
-                transaction.getCreateDate(),
-                transaction.getUpdateDate(),
-                transaction.getCreatedBy(),
-                transaction.getUpdatedBy(),
-                transaction.getId(),
-                transaction.getIsActiveEnum(),
-                transaction.getSalePrice(),
-                transaction.getPurchasePrice(),
-                transaction.getAmount(),
-                transaction.getTokenId()
-        );
-    }
-
-
-    public UserResDto mapUserToUserResDto(User user) {
-      return  null;
-    }
 }
