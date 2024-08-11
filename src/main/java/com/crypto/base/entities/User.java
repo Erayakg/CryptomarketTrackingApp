@@ -12,8 +12,6 @@ import java.util.Set;
 @Table(name = "TABLE_USER")
 public class User extends BaseEntity {
 
-
-
     @Enumerated(EnumType.STRING)
     private RoleEnum roleEnum;
 
