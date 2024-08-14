@@ -1,22 +1,14 @@
 package com.crypto.base.dto;
 
-import com.crypto.base.entities.User;
 import com.crypto.base.entities.enumtype.RoleEnum;
-import lombok.Value;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
 
 /**
- * DTO for {@link User}
+ * DTO for {@link com.crypto.base.entities.User}
  */
-@Value
-public class SaveUserReq implements Serializable {
-    RoleEnum roleEnum;
-    String name;
-    String surName;
-    String email;
-    String password;
-    String profilePhoto;
-    String about;
-    String country;
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record SaveUserReq(RoleEnum roleEnum, String name, String surName, String email, String password,
+                          String profilePhoto, String about, String country, String username) implements Serializable {
 }

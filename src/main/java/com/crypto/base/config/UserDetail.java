@@ -11,12 +11,12 @@ import java.util.List;
 
 public class UserDetail implements UserDetails {
 
-    private String email;
+    private String userName;
     private String password;
     private List<GrantedAuthority> authorities;
 
     public UserDetail(User user) {
-        this.email = user.getEmail();
+        this.userName = user.getUsername();
         this.password = user.getPassword();
         this.authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRoleEnum().name()));
     }
@@ -33,7 +33,7 @@ public class UserDetail implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return userName;
     }
 
 

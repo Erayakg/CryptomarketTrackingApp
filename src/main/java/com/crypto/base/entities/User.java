@@ -18,6 +18,9 @@ public class User extends BaseEntity {
     @Column(name = "USER_NAME")
     private String name;
 
+    @Column(name = "USER_USERNAME", unique = true, nullable = false)
+    private String username;
+
     @Column(name = "USER_SURNAME")
     private String surName;
 
@@ -48,7 +51,8 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new LinkedHashSet<>();
 
-    public User(Long id, RoleEnum roleEnum, String name, String surName, String email, String password, String profilePhoto, String about, String country, Set<Portfolio> portfolios, Set<Notification> notifications, Set<Comment> comments) {
+    public User(Long id, RoleEnum roleEnum, String name, String username, String surName, String email, String password, String profilePhoto, String about, String country, Set<Portfolio> portfolios, Set<Notification> notifications, Set<Comment> comments) {
+        this.username = username;
         this.id = id;
         this.roleEnum = roleEnum;
         this.name = name;
@@ -153,25 +157,36 @@ public class User extends BaseEntity {
         this.comments = comments;
     }
 
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(getId(), user.id) && roleEnum == user.roleEnum && Objects.equals(name, user.name) && Objects.equals(surName, user.surName) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(profilePhoto, user.profilePhoto) && Objects.equals(about, user.about) && Objects.equals(country, user.country) && Objects.equals(portfolios, user.portfolios) && Objects.equals(notifications, user.notifications) && Objects.equals(comments, user.comments);
+        return roleEnum == user.roleEnum && Objects.equals(name, user.name) && Objects.equals(username, user.username) && Objects.equals(surName, user.surName) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(profilePhoto, user.profilePhoto) && Objects.equals(about, user.about) && Objects.equals(country, user.country) && Objects.equals(portfolios, user.portfolios) && Objects.equals(notifications, user.notifications) && Objects.equals(comments, user.comments);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, roleEnum, name, surName, email, password, profilePhoto, about, country, portfolios, notifications, comments);
+        return Objects.hash(roleEnum, name, username, surName, email, password, profilePhoto, about, country, portfolios, notifications, comments);
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "comments=" + comments +
                 ", roleEnum=" + roleEnum +
                 ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
                 ", surName='" + surName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
@@ -180,7 +195,7 @@ public class User extends BaseEntity {
                 ", country='" + country + '\'' +
                 ", portfolios=" + portfolios +
                 ", notifications=" + notifications +
-                ", comments=" + comments +
+                ", id=" + id +
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +
                 ", createdBy=" + createdBy +

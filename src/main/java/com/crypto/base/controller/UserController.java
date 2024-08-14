@@ -26,24 +26,33 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<RestResponse<SaveUserReq>> createUser(@RequestBody SaveUserReq saveUserReq) {
+    public ResponseEntity<RestResponse<UserDtoRes>> createUser(@RequestBody SaveUserReq saveUserReq) {
 
-        userService.saveUser(saveUserReq);
+        UserDtoRes userDtoRes = userService.createUser(saveUserReq);
 
-        return new ResponseEntity<>(RestResponse.of(), HttpStatus.CREATED);
+        return new ResponseEntity<>(RestResponse.of(userDtoRes), HttpStatus.CREATED);
     }
-    @PostMapping("/{id}/update")
-    public ResponseEntity<RestResponse<SaveUserReq>> updateUser(@PathVariable Long id, @RequestBody SaveUserReq saveUserReq) {
+    @PostMapping("/update/{id}")
+    public ResponseEntity<RestResponse<UserDtoRes>> updateUser(@PathVariable Long id, @RequestBody SaveUserReq saveUserReq) {
 
-        userService.updateUser(saveUserReq, id);
+        UserDtoRes userDtoRes = userService.updateUser(saveUserReq, id);
 
+        return new ResponseEntity<>(RestResponse.of(userDtoRes), HttpStatus.OK);
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<RestResponse<String>> deleteUser(@PathVariable Long id) {
+         userService.deleteUser(id);
         return new ResponseEntity<>(RestResponse.empty(), HttpStatus.OK);
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<RestResponse<List<UserDtoRes>>> getUser() {
+    public ResponseEntity<RestResponse<List<UserDtoRes>>> getAllUser() {
         
         return new ResponseEntity<>(RestResponse.of(userService.getAllUsers()), HttpStatus.OK);
 
+    }
+    @GetMapping("/getId/{id}")
+    public ResponseEntity<RestResponse<UserDtoRes>> getUser(@PathVariable Long id) {
+        return new ResponseEntity<>(RestResponse.of(userService.getUserById(id)), HttpStatus.OK);
     }
 }

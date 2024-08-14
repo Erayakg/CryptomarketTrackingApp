@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface IUserService {
 
-    UserDtoRes saveUser(SaveUserReq user);
+    UserDtoRes createUser(SaveUserReq user);
 
-    void updateUser(SaveUserReq user, Long id);
+    UserDtoRes updateUser(SaveUserReq user, Long id);
 
     void deleteUser(Long id);
 
@@ -18,10 +18,9 @@ public interface IUserService {
 
     List<UserDtoRes> getAllUsers();
 
-    UserDtoRes createPortfolio(Long userId, CreatePortfolioDto portfolioDto);
-
     UserDtoRes addPortfolio(Long userID, Long portfolioID);
 
-    UserDtoRes removePortfolio(Long userID, Long portfolioID);
+    void removePortfolio(Long userID, Long portfolioID);
+
 
 }
