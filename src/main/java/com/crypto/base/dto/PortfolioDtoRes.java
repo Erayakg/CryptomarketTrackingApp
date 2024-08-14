@@ -45,6 +45,6 @@ public record PortfolioDtoRes(Long id, LocalDateTime createDate, LocalDateTime u
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record UserDto1(LocalDateTime createDate, LocalDateTime updateDate, Long createdBy, Long updatedBy,
                            String name, String surName, String profilePhoto, String about,
-                           String country) implements Serializable {
+                           String country, String username) implements Serializable {
     }
 }

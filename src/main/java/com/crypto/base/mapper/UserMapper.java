@@ -1,12 +1,16 @@
 package com.crypto.base.mapper;
 
+import com.crypto.base.dto.SaveUserReq;
 import com.crypto.base.dto.UserDtoRes;
 import com.crypto.base.entities.User;
 import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
+
     User toEntity(UserDtoRes userDtoRes);
+
+    User toEntity(SaveUserReq saveUserReq);
 
     @AfterMapping
     default void linkPortfolios(@MappingTarget User user) {
@@ -19,6 +23,7 @@ public interface UserMapper {
     }
 
     UserDtoRes toDto(User user);
+    SaveUserReq toDtoReq(User user);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     User partialUpdate(UserDtoRes userDtoRes, @MappingTarget User user);

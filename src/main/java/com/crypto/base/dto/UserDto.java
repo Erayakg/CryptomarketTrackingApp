@@ -20,4 +20,5 @@ public class UserDto implements Serializable {
     String profilePhoto;
     String about;
     String country;
+    String username;
 }

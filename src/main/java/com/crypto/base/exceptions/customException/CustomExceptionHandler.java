@@ -3,6 +3,7 @@ package com.crypto.base.exceptions.customException;
 import com.crypto.base.dto.RestResponse;
 import com.crypto.base.exceptions.AdminSaveError;
 import com.crypto.base.exceptions.BusinessException;
+import com.crypto.base.exceptions.UnauthorizedException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         RestResponse<GenericErrorMessage> genericErrorMessageRestResponse= getGenericErrorMessageRestResponse(e, request);
         return new ResponseEntity<>(genericErrorMessageRestResponse, HttpStatus.BAD_REQUEST);
 
+    }
+
+    @ExceptionHandler
+    public  final  ResponseEntity<Object> handleUnauthorizedException(UnauthorizedException e, WebRequest request){
+        RestResponse<GenericErrorMessage> genericErrorMessageRestResponse= getGenericErrorMessageRestResponse(e, request);
+        return new ResponseEntity<>(genericErrorMessageRestResponse, HttpStatus.UNAUTHORIZED);
     }
 
     private static RestResponse<GenericErrorMessage> getGenericErrorMessageRestResponse(BusinessException e,

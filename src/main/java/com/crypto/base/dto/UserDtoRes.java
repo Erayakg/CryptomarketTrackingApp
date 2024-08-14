@@ -14,7 +14,7 @@ import java.util.Set;
 public record UserDtoRes(Long id, LocalDateTime createDate, LocalDateTime updateDate, Long createdBy, Long updatedBy,
                          RoleEnum roleEnum, String name, String surName, String email, String profilePhoto,
                          String about, String country, Set<PortfolioDto1> portfolios,
-                         Set<NotificationDto1> notifications, Set<CommentDto> comments) implements Serializable {
+                         Set<NotificationDto1> notifications, Set<CommentDto> comments, String username) implements Serializable {
     /**
      * DTO for {@link com.crypto.base.entities.Portfolio}
      */
