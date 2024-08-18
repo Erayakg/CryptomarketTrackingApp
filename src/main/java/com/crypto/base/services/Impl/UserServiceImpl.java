@@ -10,6 +10,7 @@ import com.crypto.base.exceptions.AdminSaveError;
 import com.crypto.base.exceptions.BusinessException;
 import com.crypto.base.exceptions.NotfoundException;
 import com.crypto.base.exceptions.UnauthorizedException;
+import com.crypto.base.mapper.PortfolioMapper;
 import com.crypto.base.mapper.UserMapper;
 import com.crypto.base.repositories.UserRepository;
 import com.crypto.base.services.IUserService;
@@ -19,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -30,12 +32,16 @@ public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final PortfolioMapper portfolioMapper;
+    private final PortfolioService portfolioService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, PortfolioMapper portfolioMapper, PortfolioService portfolioService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.portfolioMapper = portfolioMapper;
+        this.portfolioService = portfolioService;
     }
 
     @Override
@@ -82,7 +88,7 @@ public class UserServiceImpl implements IUserService {
             User save = userRepository.save(entity);
 
             return userMapper.toDto(save);
-        }else {
+        } else {
             throw new UnauthorizedException(UserErrorMessage.USER_NOT_AUTHORITY);
         }
     }
@@ -97,14 +103,14 @@ public class UserServiceImpl implements IUserService {
         User userById = userRepository.findById(id)
                 .orElseThrow(() -> new NotfoundException(UserErrorMessage.NOT_FOUND));
 
-        if (byUsername.get().getRoleEnum().getTypeInt() == 1 || userById.getUsername().equals(authenticatedUsername) ) {
+        if (byUsername.get().getRoleEnum().getTypeInt() == 1 || userById.getUsername().equals(authenticatedUsername)) {
             userRepository.delete(userById);
-        }
-        else {
+        } else {
             throw new UnauthorizedException(UserErrorMessage.USER_NOT_AUTHORITY);
         }
 
     }
+
     @Override
     public UserDtoRes getUserById(Long id) {
 
@@ -123,8 +129,29 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserDtoRes addPortfolio(Long userID, Long portfolioID) {
-        return null;
+    public UserDtoRes addPortfolio(Long userID, PortfolioDtoReq portfolioDtoReq) {
+
+        User user = userRepository.findById(userID).orElseThrow(() -> new NotfoundException(UserErrorMessage.NOT_FOUND));
+
+        String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Optional<User> byUsername = userRepository.findByUsername(authenticatedUsername);
+
+        if (byUsername.get().getRoleEnum().getTypeInt() == 1 || user.getUsername().equals(authenticatedUsername)) {
+
+            Portfolio entity = portfolioMapper.toEntity(portfolioDtoReq);
+
+            Set<Portfolio> portfolios = user.getPortfolios();
+
+            portfolios.add(entity);
+
+            User save = userRepository.save(user);
+
+            return userMapper.toDto(save);
+
+        } else {
+            throw new UnauthorizedException(UserErrorMessage.USER_NOT_AUTHORITY);
+        }
     }
 
     @Override

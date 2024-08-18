@@ -1,6 +1,6 @@
 package com.crypto.base.services;
 
-import com.crypto.base.dto.CreatePortfolioDto;
+import com.crypto.base.dto.PortfolioDtoReq;
 import com.crypto.base.dto.SaveUserReq;
 import com.crypto.base.dto.UserDtoRes;
 
@@ -18,9 +18,8 @@ public interface IUserService {
 
     List<UserDtoRes> getAllUsers();
 
-    UserDtoRes addPortfolio(Long userID, Long portfolioID);
+    UserDtoRes addPortfolio(Long userID, PortfolioDtoReq portfolioDtoReq);
 
     void removePortfolio(Long userID, Long portfolioID);
-
 
 }
