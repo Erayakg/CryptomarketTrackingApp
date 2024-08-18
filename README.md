@@ -55,7 +55,7 @@ Not all APIs have been written, they will be completed when the project is compl
 #### Create User
 
 ```http
-  Post /http://localhost:8080/v1/user/getAll
+  Post /http://localhost:8080/v1/user/create
 ```
 | Parameters | Type     | Comment |
 |:-----------|:---------|:--------|
