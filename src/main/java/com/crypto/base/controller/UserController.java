@@ -1,5 +1,6 @@
 package com.crypto.base.controller;
 
+import com.crypto.base.dto.PortfolioDtoReq;
 import com.crypto.base.dto.RestResponse;
 import com.crypto.base.dto.SaveUserReq;
 import com.crypto.base.dto.UserDtoRes;
@@ -7,7 +8,6 @@ import com.crypto.base.services.Impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,12 +16,11 @@ import java.util.List;
 @RequestMapping("/v1/user")
 public class UserController {
 
-    private final BCryptPasswordEncoder passwordEncoder;
 
     private final UserServiceImpl userService;
+
     @Autowired
-    public UserController(BCryptPasswordEncoder passwordEncoder, UserServiceImpl userService) {
-        this.passwordEncoder = passwordEncoder;
+    public UserController(  UserServiceImpl userService) {
         this.userService = userService;
     }
 
@@ -54,5 +53,11 @@ public class UserController {
     @GetMapping("/getId/{id}")
     public ResponseEntity<RestResponse<UserDtoRes>> getUser(@PathVariable Long id) {
         return new ResponseEntity<>(RestResponse.of(userService.getUserById(id)), HttpStatus.OK);
+    }
+    @PostMapping("/addPortfolio/{id}")
+    public ResponseEntity<RestResponse<UserDtoRes>> addPortfolio(@PathVariable Long id, @RequestBody PortfolioDtoReq portfolioDtoReq) {
+
+        return new ResponseEntity<>(RestResponse.of(userService.addPortfolio(id,portfolioDtoReq )),HttpStatus.OK);
+
     }
 }

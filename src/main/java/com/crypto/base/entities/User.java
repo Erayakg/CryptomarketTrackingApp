@@ -15,30 +15,24 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private RoleEnum roleEnum;
 
-    @Column(name = "USER_NAME")
     private String name;
 
-    @Column(name = "USER_USERNAME", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(name = "USER_SURNAME")
     private String surName;
 
-    @Column(name = "USER_EMAIL")
     private String email;
 
-    @Column(name = "USER_PASSWORD")
     private String password;
 
-    @Column(name = "USER_PROFILE_PHOTO")
     private String profilePhoto;
 
-    @Column(name = "USER_ABOUT",length = 1000)
+    @Column(length = 1000)
     private String about;
 
-    @Column(name = "USER_COUNTRY")
     private String country;
-    @Column(name = "PORTFOLIO")
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Portfolio> portfolios = new LinkedHashSet<>();
 

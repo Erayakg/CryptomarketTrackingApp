@@ -1,18 +1,18 @@
 package com.crypto.base.services;
 
-import com.crypto.base.dto.CreatePortfolioDto;
+
+import com.crypto.base.dto.PortfolioDtoReq;
 import com.crypto.base.dto.PortfolioDtoRes;
-import com.crypto.base.dto.PortfolioTransactionReq;
 
 import java.util.List;
 
 public interface IPortfolioService {
 
-    void updatePortfolio(PortfolioTransactionReq transactionReq);
+    PortfolioDtoRes updatePortfolio(PortfolioDtoReq portfolioDtoReq);
 
     List<PortfolioDtoRes> getAllPortfolio();
 
-    PortfolioDtoRes createPortfolio(CreatePortfolioDto createPortfolioDto);
+    PortfolioDtoRes createPortfolio(Long id,PortfolioDtoReq  portfolioDtoReq);
 
     PortfolioDtoRes getPortfolioById(long id);
 
