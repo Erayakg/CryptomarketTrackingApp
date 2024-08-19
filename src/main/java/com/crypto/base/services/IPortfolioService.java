@@ -12,8 +12,6 @@ public interface IPortfolioService {
 
     List<PortfolioDtoRes> getAllPortfolio();
 
-    PortfolioDtoRes createPortfolio(Long id,PortfolioDtoReq  portfolioDtoReq);
-
     PortfolioDtoRes getPortfolioById(long id);
 
     void deletePortfolio(long id);

@@ -1,6 +1,9 @@
 package com.crypto.base.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.proxy.HibernateProxy;
+
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -23,14 +26,13 @@ public class Portfolio extends BaseEntity {
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new LinkedHashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    @ManyToMany(mappedBy = "portfolios")
+    Set<User>  user=new HashSet<>();
 
     public Portfolio() {
     }
 
-    public Portfolio(Long id, String name, String description, Set<Transaction> transactions, Set<Like> likes, Set<Comment> comments, User user) {
-        this.id = id;
+    public Portfolio(String name, String description, Set<Transaction> transactions, Set<Like> likes, Set<Comment> comments, Set<User> user) {
         this.name = name;
         this.description = description;
         this.transactions = transactions;
@@ -38,7 +40,6 @@ public class Portfolio extends BaseEntity {
         this.comments = comments;
         this.user = user;
     }
-
 
     public String getName() {
         return name;
@@ -80,26 +81,14 @@ public class Portfolio extends BaseEntity {
         this.comments = comments;
     }
 
-    public User getUser() {
+    public Set<User> getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(Set<User> user) {
         this.user = user;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Portfolio portfolio = (Portfolio) o;
-        return Objects.equals(id, portfolio.id) && Objects.equals(name, portfolio.name) && Objects.equals(description, portfolio.description) && Objects.equals(transactions, portfolio.transactions) && Objects.equals(likes, portfolio.likes) && Objects.equals(comments, portfolio.comments) && Objects.equals(user, portfolio.user);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, description, transactions, likes, comments, user);
-    }
 
     @Override
     public String toString() {
@@ -116,5 +105,21 @@ public class Portfolio extends BaseEntity {
                 ", createdBy=" + createdBy +
                 ", updatedBy=" + updatedBy +
                 '}';
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Portfolio portfolio = (Portfolio) o;
+        return getId() != null && Objects.equals(getId(), portfolio.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

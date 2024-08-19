@@ -1,9 +1,6 @@
 package com.crypto.base.controller;
 
-import com.crypto.base.dto.PortfolioDtoReq;
-import com.crypto.base.dto.RestResponse;
-import com.crypto.base.dto.SaveUserReq;
-import com.crypto.base.dto.UserDtoRes;
+import com.crypto.base.dto.*;
 import com.crypto.base.services.Impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,10 +51,24 @@ public class UserController {
     public ResponseEntity<RestResponse<UserDtoRes>> getUser(@PathVariable Long id) {
         return new ResponseEntity<>(RestResponse.of(userService.getUserById(id)), HttpStatus.OK);
     }
-    @PostMapping("/addPortfolio/{id}")
-    public ResponseEntity<RestResponse<UserDtoRes>> addPortfolio(@PathVariable Long id, @RequestBody PortfolioDtoReq portfolioDtoReq) {
+    @PostMapping("/createPortfolio/{id}")
+    public ResponseEntity<RestResponse<UserDtoRes>> createPortfolio(@PathVariable Long id, @RequestBody PortfolioDtoReq portfolioDtoReq) {
 
-        return new ResponseEntity<>(RestResponse.of(userService.addPortfolio(id,portfolioDtoReq )),HttpStatus.OK);
+        return new ResponseEntity<>(RestResponse.of(userService.CreatePortfolio(id,portfolioDtoReq )),HttpStatus.OK);
 
     }
+    @PostMapping("/addPortfolio")
+    public ResponseEntity<RestResponse<UserDtoRes>> addPortfolioReq(@RequestBody AddPortfolioReq  addPortfolioReq) {
+
+        return new ResponseEntity<>
+                (RestResponse.of(userService.addPortfolio
+                        (addPortfolioReq.getUserId(), addPortfolioReq.getPortfolioId())), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/removePortfolio")
+    public ResponseEntity<RestResponse<String>> removePortfolioReq(@RequestBody AddPortfolioReq  addPortfolioReq) {
+       userService.removePortfolio(addPortfolioReq.getUserId(), addPortfolioReq.getPortfolioId());
+        return new ResponseEntity<>(RestResponse.empty(), HttpStatus.OK);
+    }
+
 }

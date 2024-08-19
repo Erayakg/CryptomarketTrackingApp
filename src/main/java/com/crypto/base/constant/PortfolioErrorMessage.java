@@ -5,7 +5,7 @@ import com.crypto.base.exceptions.BaseErrorMessage;
 public enum PortfolioErrorMessage implements BaseErrorMessage {
 
     PORTFOLIO_CREATE_FAILED("Portfolio create  failed!"),
-    REQUEST_FAILED("Portfolio request is not null !!");
+    REQUEST_FAILED("Portfolio request is not null !!"), NOT_FOUND_EXCEPTIONS("Portfolio not found!"),;
 
 
     private String message;

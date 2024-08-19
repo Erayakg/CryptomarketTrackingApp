@@ -4,6 +4,7 @@ import com.crypto.base.entities.enumtype.RoleEnum;
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -33,8 +34,13 @@ public class User extends BaseEntity {
 
     private String country;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Portfolio> portfolios = new LinkedHashSet<>();
+    @ManyToMany( cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE})
+    @JoinTable(name =  "TABLE_Portfolio_User",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "PORTFOLIO_ID"))
+    private Set<Portfolio> portfolios = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "TABLE_USER_notifications",
@@ -135,13 +141,14 @@ public class User extends BaseEntity {
     public void setPortfolios(Set<Portfolio> portfolios) {
         this.portfolios = portfolios;
     }
+
     public void addPortfolio(Portfolio portfolio) {
         this.portfolios.add(portfolio);
-        portfolio.setUser(this);
+        portfolio.getUser().add(this);
     }
     public void removePortfolio(Portfolio portfolio) {
         this.portfolios.remove(portfolio);
-        portfolio.setUser(null);
+        portfolio.getUser().remove(this);
     }
     public Set<Notification> getNotifications() {
         return notifications;

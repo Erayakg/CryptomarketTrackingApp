@@ -12,29 +12,30 @@ import java.util.Set;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record UserDtoRes(Long id, LocalDateTime createDate, LocalDateTime updateDate, Long createdBy, Long updatedBy,
-                         RoleEnum roleEnum, String name, String surName, String email, String profilePhoto,
-                         String about, String country, Set<PortfolioDto1> portfolios,
-                         Set<NotificationDto1> notifications, Set<CommentDto> comments, String username) implements Serializable {
+                         RoleEnum roleEnum, String name, String username, String surName, String email,
+                         String profilePhoto, String about, String country, Set<PortfolioDto> portfolios,
+                         Set<NotificationDto> notifications, Set<CommentDto> comments) implements Serializable {
     /**
      * DTO for {@link com.crypto.base.entities.Portfolio}
      */
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public record PortfolioDto1(Long id, LocalDateTime createDate, String name,
-                                String description) implements Serializable {
+    public record PortfolioDto(Long id, LocalDateTime createDate, LocalDateTime updateDate, Long createdBy,
+                               Long updatedBy, String name, String description) implements Serializable {
     }
 
     /**
      * DTO for {@link com.crypto.base.entities.Notification}
      */
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public record NotificationDto1(Long id, LocalDateTime createDate, String text,
-                                   String title) implements Serializable {
+    public record NotificationDto(Long id, LocalDateTime createDate, LocalDateTime updateDate, Long createdBy,
+                                  Long updatedBy, String text, String title) implements Serializable {
     }
 
     /**
      * DTO for {@link com.crypto.base.entities.Comment}
      */
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public record CommentDto(LocalDateTime createDate, String text) implements Serializable {
+    public record CommentDto(Long id, LocalDateTime createDate, LocalDateTime updateDate, Long createdBy,
+                             Long updatedBy, String text) implements Serializable {
     }
 }
