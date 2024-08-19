@@ -1,27 +1,23 @@
 package com.crypto.base.services.Impl;
 
+import com.crypto.base.constant.PortfolioErrorMessage;
 import com.crypto.base.constant.UserErrorMessage;
 import com.crypto.base.dto.*;
-import com.crypto.base.entities.Notification;
 import com.crypto.base.entities.Portfolio;
-import com.crypto.base.entities.Transaction;
 import com.crypto.base.entities.User;
-import com.crypto.base.exceptions.AdminSaveError;
-import com.crypto.base.exceptions.BusinessException;
-import com.crypto.base.exceptions.NotfoundException;
-import com.crypto.base.exceptions.UnauthorizedException;
+import com.crypto.base.exceptions.*;
 import com.crypto.base.mapper.PortfolioMapper;
 import com.crypto.base.mapper.UserMapper;
 import com.crypto.base.repositories.PortfolioRepository;
 import com.crypto.base.repositories.UserRepository;
 import com.crypto.base.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.server.Session;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -132,7 +128,8 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserDtoRes addPortfolio(Long userID, PortfolioDtoReq portfolioDtoReq) {
+        public UserDtoRes CreatePortfolio(Long userID, PortfolioDtoReq portfolioDtoReq) {
+
 
         User user = userRepository.findById(userID).orElseThrow(() -> new NotfoundException(UserErrorMessage.NOT_FOUND));
 
@@ -148,7 +145,7 @@ public class UserServiceImpl implements IUserService {
 
             User save = userRepository.save(user);
 
-            return userMapper.toDto(save);
+          return userMapper.toDto(save);
 
         } else {
             throw new UnauthorizedException(UserErrorMessage.USER_NOT_AUTHORITY);
@@ -156,8 +153,57 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public UserDtoRes addPortfolio(Long Userid, Long PortfolioId) {
+
+        if (Userid == null || PortfolioId == null) {
+            throw new BadRequestException(UserErrorMessage.REQUEST_FAILED);
+        }
+
+        String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Portfolio portfolio = portfolioRepository.findById(PortfolioId).orElseThrow(()->new NotfoundException(PortfolioErrorMessage.NOT_FOUND_EXCEPTIONS));
+
+        User user = userRepository.getUserById(Userid);
+
+        Optional<User> byUsername = userRepository.findByUsername(authenticatedUsername);
+
+        if (authenticatedUsername.equals(user.getUsername()) || byUsername.get().getRoleEnum().getTypeInt().equals(1)) {
+
+            user.addPortfolio(portfolio);
+
+            User save = userRepository.save(user);
+
+            return userMapper.toDto(save);
+
+        }
+        else {
+            throw  new UnauthorizedException(UserErrorMessage.USER_NOT_AUTHORITY);
+        }
+    }
+    @Override
     public void removePortfolio(Long userID, Long portfolioID) {
 
+        if (userID == null || portfolioID == null) {
+            throw new BadRequestException(UserErrorMessage.REQUEST_FAILED);
+        }
+
+        String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Portfolio portfolio = portfolioRepository.findById(portfolioID).orElseThrow(()->new NotfoundException(PortfolioErrorMessage.NOT_FOUND_EXCEPTIONS));
+
+        User user = userRepository.getUserById(userID);
+
+        Optional<User> byUsername = userRepository.findByUsername(authenticatedUsername);
+
+        if (authenticatedUsername.equals(user.getUsername()) || byUsername.get().getRoleEnum().getTypeInt().equals(1)) {
+
+            user.removePortfolio(portfolio);
+
+            userRepository.save(user);
+        }
+        else {
+            throw  new UnauthorizedException(UserErrorMessage.USER_NOT_AUTHORITY);
+        }
     }
 
 
