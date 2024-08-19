@@ -12,6 +12,7 @@ import com.crypto.base.exceptions.NotfoundException;
 import com.crypto.base.exceptions.UnauthorizedException;
 import com.crypto.base.mapper.PortfolioMapper;
 import com.crypto.base.mapper.UserMapper;
+import com.crypto.base.repositories.PortfolioRepository;
 import com.crypto.base.repositories.UserRepository;
 import com.crypto.base.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +35,16 @@ public class UserServiceImpl implements IUserService {
     private final PasswordEncoder passwordEncoder;
     private final PortfolioMapper portfolioMapper;
     private final PortfolioService portfolioService;
+    private final PortfolioRepository portfolioRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, PortfolioMapper portfolioMapper, PortfolioService portfolioService) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, PortfolioMapper portfolioMapper, PortfolioService portfolioService, PortfolioRepository portfolioRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.portfolioMapper = portfolioMapper;
         this.portfolioService = portfolioService;
+        this.portfolioRepository = portfolioRepository;
     }
 
     @Override
@@ -141,9 +144,7 @@ public class UserServiceImpl implements IUserService {
 
             Portfolio entity = portfolioMapper.toEntity(portfolioDtoReq);
 
-            Set<Portfolio> portfolios = user.getPortfolios();
-
-            portfolios.add(entity);
+            user.addPortfolio(entity);
 
             User save = userRepository.save(user);
 

@@ -1,13 +1,10 @@
 package com.crypto.base.dto;
 
 
-import com.crypto.base.entities.enumtype.IsActiveEnum;
-import com.crypto.base.entities.enumtype.RoleEnum;
 import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
