@@ -135,7 +135,14 @@ public class User extends BaseEntity {
     public void setPortfolios(Set<Portfolio> portfolios) {
         this.portfolios = portfolios;
     }
-
+    public void addPortfolio(Portfolio portfolio) {
+        this.portfolios.add(portfolio);
+        portfolio.setUser(this);
+    }
+    public void removePortfolio(Portfolio portfolio) {
+        this.portfolios.remove(portfolio);
+        portfolio.setUser(null);
+    }
     public Set<Notification> getNotifications() {
         return notifications;
     }
@@ -161,20 +168,6 @@ public class User extends BaseEntity {
     }
 
     @Override
-    public boolean equals(Object o) {
-
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return roleEnum == user.roleEnum && Objects.equals(name, user.name) && Objects.equals(username, user.username) && Objects.equals(surName, user.surName) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(profilePhoto, user.profilePhoto) && Objects.equals(about, user.about) && Objects.equals(country, user.country) && Objects.equals(portfolios, user.portfolios) && Objects.equals(notifications, user.notifications) && Objects.equals(comments, user.comments);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(roleEnum, name, username, surName, email, password, profilePhoto, about, country, portfolios, notifications, comments);
-    }
-
-    @Override
     public String toString() {
         return "User{" +
                 "comments=" + comments +
@@ -195,5 +188,21 @@ public class User extends BaseEntity {
                 ", createdBy=" + createdBy +
                 ", updatedBy=" + updatedBy +
                 '}';
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        User user = (User) o;
+        return getId() != null && Objects.equals(getId(), user.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

@@ -24,7 +24,6 @@ public class Portfolio extends BaseEntity {
     private Set<Comment> comments = new LinkedHashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
     private User user;
 
     public Portfolio() {

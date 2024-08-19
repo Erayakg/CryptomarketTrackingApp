@@ -12,7 +12,6 @@ public interface PortfolioMapper {
 
     PortfolioDtoRes toDto(Portfolio portfolio);
 
-
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Portfolio partialUpdate(PortfolioDtoReq portfolioDtoReq, @MappingTarget Portfolio portfolio);
 }

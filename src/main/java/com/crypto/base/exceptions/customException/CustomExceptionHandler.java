@@ -3,6 +3,7 @@ package com.crypto.base.exceptions.customException;
 import com.crypto.base.dto.RestResponse;
 import com.crypto.base.exceptions.AdminSaveError;
 import com.crypto.base.exceptions.BusinessException;
+import com.crypto.base.exceptions.ExpiredJwtException;
 import com.crypto.base.exceptions.UnauthorizedException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -27,10 +29,16 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleExpiredJwtException(ExpiredJwtException e, WebRequest request){
+        RestResponse<GenericErrorMessage>
+                genericErrorMessageRestResponse = getGenericErrorMessageRestResponse(e, request);
+        genericErrorMessageRestResponse.setMessage("Token expired");
+        return new ResponseEntity<>(genericErrorMessageRestResponse, HttpStatus.UNAUTHORIZED);
+    }
 
     @ExceptionHandler
     public final ResponseEntity<Object> handleAllExceptions(Exception e, WebRequest request){
-
         RestResponse<GenericErrorMessage>
                 genericErrorMessageRestResponse = getGenericErrorMessageRestResponse(e, request);
         return new ResponseEntity<>(genericErrorMessageRestResponse, HttpStatus.INTERNAL_SERVER_ERROR);
