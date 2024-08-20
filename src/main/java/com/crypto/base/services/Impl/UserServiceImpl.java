@@ -50,16 +50,17 @@ public class UserServiceImpl implements IUserService {
             User saveUser = userMapper.toEntity(user);
 
             if (saveUser.getRoleEnum().getTypeInt() == 1) {
-                throw new AdminSaveError(UserErrorMessage.USER_NOT_ADMIN);
+                    throw new AdminSaveError(UserErrorMessage.USER_NOT_ADMIN);
             }
 
             saveUser.setPassword(passwordEncoder.encode(saveUser.getPassword()));
+
             User save = userRepository.save(saveUser);
 
             return userMapper.toDto(save);
 
         } catch (Exception e) {
-            throw new BusinessException(UserErrorMessage.USER_SAVE_FAILED);
+            throw new BadRequestException(UserErrorMessage.USER_SAVE_FAILED);
         }
     }
 
@@ -128,16 +129,15 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-        public UserDtoRes CreatePortfolio(Long userID, PortfolioDtoReq portfolioDtoReq) {
-
-
-        User user = userRepository.findById(userID).orElseThrow(() -> new NotfoundException(UserErrorMessage.NOT_FOUND));
+    public UserDtoRes CreatePortfolio(PortfolioDtoReq portfolioDtoReq) {
 
         String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 
         Optional<User> byUsername = userRepository.findByUsername(authenticatedUsername);
 
-        if (byUsername.get().getRoleEnum().getTypeInt() == 1 || user.getUsername().equals(authenticatedUsername)) {
+        User user = byUsername.get();
+
+        if (byUsername.get().getRoleEnum().getTypeInt() != 2) {
 
             Portfolio entity = portfolioMapper.toEntity(portfolioDtoReq);
 
@@ -145,10 +145,10 @@ public class UserServiceImpl implements IUserService {
 
             User save = userRepository.save(user);
 
-          return userMapper.toDto(save);
+            return userMapper.toDto(save);
 
         } else {
-            throw new UnauthorizedException(UserErrorMessage.USER_NOT_AUTHORITY);
+            throw new UnauthorizedException(UserErrorMessage.USER_NOT_AUTHORITY_CREATE_PORTFOLIO);
         }
     }
 
@@ -161,7 +161,7 @@ public class UserServiceImpl implements IUserService {
 
         String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        Portfolio portfolio = portfolioRepository.findById(PortfolioId).orElseThrow(()->new NotfoundException(PortfolioErrorMessage.NOT_FOUND_EXCEPTIONS));
+        Portfolio portfolio = portfolioRepository.findById(PortfolioId).orElseThrow(() -> new NotfoundException(PortfolioErrorMessage.NOT_FOUND_EXCEPTIONS));
 
         User user = userRepository.getUserById(Userid);
 
@@ -175,11 +175,11 @@ public class UserServiceImpl implements IUserService {
 
             return userMapper.toDto(save);
 
-        }
-        else {
-            throw  new UnauthorizedException(UserErrorMessage.USER_NOT_AUTHORITY);
+        } else {
+            throw new UnauthorizedException(UserErrorMessage.USER_NOT_AUTHORITY);
         }
     }
+
     @Override
     public void removePortfolio(Long userID, Long portfolioID) {
 
@@ -189,7 +189,7 @@ public class UserServiceImpl implements IUserService {
 
         String authenticatedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        Portfolio portfolio = portfolioRepository.findById(portfolioID).orElseThrow(()->new NotfoundException(PortfolioErrorMessage.NOT_FOUND_EXCEPTIONS));
+        Portfolio portfolio = portfolioRepository.findById(portfolioID).orElseThrow(() -> new NotfoundException(PortfolioErrorMessage.NOT_FOUND_EXCEPTIONS));
 
         User user = userRepository.getUserById(userID);
 
@@ -200,9 +200,8 @@ public class UserServiceImpl implements IUserService {
             user.removePortfolio(portfolio);
 
             userRepository.save(user);
-        }
-        else {
-            throw  new UnauthorizedException(UserErrorMessage.USER_NOT_AUTHORITY);
+        } else {
+            throw new UnauthorizedException(UserErrorMessage.USER_NOT_AUTHORITY);
         }
     }
 

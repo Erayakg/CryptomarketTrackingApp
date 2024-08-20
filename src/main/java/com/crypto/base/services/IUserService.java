@@ -19,7 +19,7 @@ public interface IUserService {
 
     List<UserDtoRes> getAllUsers();
 
-    UserDtoRes CreatePortfolio(Long userID, PortfolioDtoReq portfolioDtoReq);
+    UserDtoRes CreatePortfolio(PortfolioDtoReq portfolioDtoReq);
 
     UserDtoRes addPortfolio(Long Userid, Long PortfolioId );
 

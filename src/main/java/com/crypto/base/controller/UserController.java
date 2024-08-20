@@ -51,10 +51,10 @@ public class UserController {
     public ResponseEntity<RestResponse<UserDtoRes>> getUser(@PathVariable Long id) {
         return new ResponseEntity<>(RestResponse.of(userService.getUserById(id)), HttpStatus.OK);
     }
-    @PostMapping("/createPortfolio/{id}")
-    public ResponseEntity<RestResponse<UserDtoRes>> createPortfolio(@PathVariable Long id, @RequestBody PortfolioDtoReq portfolioDtoReq) {
+    @PostMapping("/createPortfolio")
+    public ResponseEntity<RestResponse<UserDtoRes>> createPortfolio( @RequestBody PortfolioDtoReq portfolioDtoReq) {
 
-        return new ResponseEntity<>(RestResponse.of(userService.CreatePortfolio(id,portfolioDtoReq )),HttpStatus.OK);
+        return new ResponseEntity<>(RestResponse.of(userService.CreatePortfolio(portfolioDtoReq)),HttpStatus.OK);
 
     }
     @PostMapping("/addPortfolio")
